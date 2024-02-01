@@ -1,10 +1,12 @@
 import express from 'express';
 import mongoosr from 'mongoose';
 
-import { registerValidation } from './validations/auth.js';
+import { feedbackCreatekValidation, loginValidation, registerValidation } from './validations.js';
 
 import checkAuth from './utils/checkAuth.js';
 import * as UserController from './controllers/UserController.js';
+import * as FeedbackController from './controllers/FeedbackController.js'
+
 
 mongoosr
     .connect('mongodb+srv://admin:cjh0RTbuioCIBQ3f@cluster0.dbo7krm.mongodb.net/feedbackApp?retryWrites=true&w=majority')
@@ -15,9 +17,17 @@ const app = express();
 
 app.use(express.json());
 
-app.post('/auth/login', UserController.login)
+app.post('/auth/login', loginValidation, UserController.login);
 app.post('/auth/register', registerValidation, UserController.register);
-app.get('/auth/me',checkAuth , UserController.getMe)
+app.get('/auth/me',checkAuth , UserController.getMe);
+
+app.get('/feedbacks', FeedbackController.getAll);
+app.get('/feedbacks/:id', FeedbackController.getOne);
+app.delete('/feedbacks/:id', checkAuth, FeedbackController.remove);
+app.patch('/feedbacks/:id', checkAuth, FeedbackController.update);
+
+
+app.post('/feedbacks', checkAuth, feedbackCreatekValidation ,FeedbackController.create)
 
 
 app.listen(4444, (err) => {
