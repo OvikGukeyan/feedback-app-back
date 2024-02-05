@@ -1,11 +1,13 @@
 import express from 'express';
 import mongoosr from 'mongoose';
+import multer from 'multer';
+import cors from 'cors';
 
 import { feedbackCreatekValidation, loginValidation, registerValidation } from './validations.js';
 
-import checkAuth from './utils/checkAuth.js';
-import * as UserController from './controllers/UserController.js';
-import * as FeedbackController from './controllers/FeedbackController.js'
+import {FeedbackController, UserController} from './controllers/index.js'; 
+
+import {handleValidationErrors, checkAuth} from './utils/index.js';
 
 
 mongoosr
@@ -15,19 +17,36 @@ mongoosr
 
 const app = express();
 
-app.use(express.json());
+const storage = multer.diskStorage({
+    destination: (_, __, cb) => {
+        cb(null, 'uploads');
+    },
+    filename: (_, file, cb) => {
+        cb(null, file.originalname);
+    }
+});
 
-app.post('/auth/login', loginValidation, UserController.login);
-app.post('/auth/register', registerValidation, UserController.register);
+const upload = multer({storage});
+
+app.use(express.json());
+app.use('/uploads', express.static('uploads'));
+app.use(cors());
+
+app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login);
+app.post('/auth/register', registerValidation, handleValidationErrors, UserController.register);
 app.get('/auth/me',checkAuth , UserController.getMe);
+
+app.post('/upload', checkAuth, upload.single('image'), async(req, res) => {
+    res.json({
+        url: `/uploads/${req.file.originalname}`
+    })
+})
 
 app.get('/feedbacks', FeedbackController.getAll);
 app.get('/feedbacks/:id', FeedbackController.getOne);
+app.post('/feedbacks', checkAuth, feedbackCreatekValidation , handleValidationErrors, FeedbackController.create);
 app.delete('/feedbacks/:id', checkAuth, FeedbackController.remove);
-app.patch('/feedbacks/:id', checkAuth, FeedbackController.update);
-
-
-app.post('/feedbacks', checkAuth, feedbackCreatekValidation ,FeedbackController.create)
+app.patch('/feedbacks/:id', checkAuth, feedbackCreatekValidation , handleValidationErrors, FeedbackController.update);
 
 
 app.listen(4444, (err) => {
