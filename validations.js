@@ -10,7 +10,7 @@ export const registerValidation = [
     body('password', 'Title must have at least five characters').isLength({min: 5}),
     body('fullName', 'Name must have at least three characters').isLength({min: 3}),
     body('userName', 'Name must have at least three characters').isLength({min: 3}),
-    body('avatarUrl').optional().isURL()
+    body('avatarUrl').optional(),
 ];
 
 export const feedbackCreatekValidation = [

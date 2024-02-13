@@ -41,7 +41,6 @@ export const getOne = async (req, res) => {
                 message: 'Feedback not found'
             })
         }
-
         res.json(feedback)
     } catch (error) {
         console.log(error);
