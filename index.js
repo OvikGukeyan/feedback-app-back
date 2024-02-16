@@ -3,9 +3,9 @@ import mongoosr from 'mongoose';
 import multer from 'multer';
 import cors from 'cors';
 
-import { feedbackCreatekValidation, loginValidation, registerValidation } from './validations.js';
+import { commentCreateValidation, feedbackCreatekValidation, loginValidation, registerValidation } from './validations.js';
 
-import {FeedbackController, UserController} from './controllers/index.js'; 
+import {FeedbackController, UserController, CommentController} from './controllers/index.js'; 
 
 import {handleValidationErrors, checkAuth} from './utils/index.js';
 
@@ -41,6 +41,8 @@ app.post('/upload', upload.single('image'), async(req, res) => {
         url: `/uploads/${req.file.originalname}`
     })
 })
+
+app.post('/feedbacks/:feedbackId/comments',checkAuth, commentCreateValidation, handleValidationErrors, CommentController.create);
 
 app.get('/feedbacks', FeedbackController.getAll);
 app.get('/feedbacks/:id', FeedbackController.getOne);

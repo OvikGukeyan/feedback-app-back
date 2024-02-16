@@ -16,25 +16,25 @@ const FeedbackSchema = new mongoose.Schema(
         },
         category: {
             type: String,
-            required: true
+            required: true,
         },
         status: {
             type: String,
-            default: 'suggestion'
+            default: 'Suggestion'
         },
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true
         },
-        coments: {
-            type: Array,
-            default: []
-        }
+        comments: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Comment',
+        }]
     },
     {
         timestamps: true
     }
 );
 
-export default mongoose.model('Feedback', FeedbackSchema)
+export default mongoose.model('Feedback', FeedbackSchema);

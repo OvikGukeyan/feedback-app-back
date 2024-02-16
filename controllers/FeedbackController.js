@@ -22,7 +22,27 @@ export const create = async (req, res) => {
 
 export const getAll = async (req, res) => {
     try {
-        const feedbacks = await FeedbackModel.find().populate('user').exec();
+        const feedbacks = await FeedbackModel.find()
+            .populate([{
+                path: 'comments',
+                populate: [{
+                    path: 'replies',
+                    populate: {
+                        path: 'user',
+                        select: '-passwordHash'
+                    }
+                },
+                {
+                    path: 'user',
+                    select: '-passwordHash'
+                }]
+            },
+            {
+                path: 'user',
+                select: '-passwordHash'
+            }
+            ])
+            .exec();
         res.json(feedbacks)
     } catch (error) {
         console.log(error);
@@ -35,18 +55,40 @@ export const getAll = async (req, res) => {
 export const getOne = async (req, res) => {
     try {
         const postId = req.params.id;
-        const feedback = await FeedbackModel.findById(postId).populate('user').exec();
+        const feedback = await FeedbackModel.findById(postId)
+        .populate([{
+            path: 'comments',
+            populate: [{
+                path: 'replies',
+                populate: {
+                    path: 'user',
+                    select: '-passwordHash'
+                }
+            },
+            {
+                path: 'user',
+                select: '-passwordHash'
+            }]
+        },
+        {
+            path: 'user',
+            select: '-passwordHash'
+        }
+        ])
+            .exec();
+
         if (!feedback) {
             return res.status(404).json({
                 message: 'Feedback not found'
-            })
+            });
         }
-        res.json(feedback)
+
+        res.json(feedback);
     } catch (error) {
         console.log(error);
         res.status(500).json({
             message: 'Failed to get feedback'
-        })
+        });
     }
 };
 
@@ -83,7 +125,7 @@ export const update = async (req, res) => {
         res.json({
             success: true
         })
-        
+
     } catch (error) {
         console.log(error);
         res.status(500).json({

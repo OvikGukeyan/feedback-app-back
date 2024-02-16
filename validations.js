@@ -18,3 +18,7 @@ export const feedbackCreatekValidation = [
     body('category').isString(),
     body('description', 'Detail must have at least five characters').isLength({min: 5}).isString(),
 ];
+
+export const commentCreateValidation = [
+    body('content').isLength({min: 10, max: 255}).isString()
+]
