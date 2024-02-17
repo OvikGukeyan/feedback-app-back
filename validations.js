@@ -22,3 +22,4 @@ export const feedbackCreatekValidation = [
 export const commentCreateValidation = [
     body('content').isLength({min: 10, max: 255}).isString()
 ]
+
