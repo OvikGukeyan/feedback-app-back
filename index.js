@@ -3,7 +3,7 @@ import mongoosr from 'mongoose';
 import multer from 'multer';
 import cors from 'cors';
 
-import { commentCreateValidation, feedbackCreatekValidation, loginValidation, registerValidation } from './validations.js';
+import {replyCreateValidation, commentCreateValidation, feedbackCreatekValidation, loginValidation, registerValidation } from './validations.js';
 
 import {FeedbackController, UserController, CommentController, ReplyController} from './controllers/index.js'; 
 
@@ -43,7 +43,7 @@ app.post('/upload', upload.single('image'), async(req, res) => {
 })
 
 app.post('/feedbacks/:feedbackId/comments',checkAuth, commentCreateValidation, handleValidationErrors, CommentController.create);
-app.post('/comments/:commentId/replies',checkAuth, commentCreateValidation, handleValidationErrors, ReplyController.create);
+app.post('/comments/:commentId/replies',checkAuth, replyCreateValidation, handleValidationErrors, ReplyController.create);
 
 
 app.get('/feedbacks', FeedbackController.getAll);

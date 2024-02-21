@@ -13,7 +13,8 @@ const CommentSchema = new mongoose.Schema({
     replies: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Reply'
-    }]
+    }],
+    
 },
     {
         timestamps: true

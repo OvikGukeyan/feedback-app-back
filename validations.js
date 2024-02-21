@@ -20,6 +20,11 @@ export const feedbackCreatekValidation = [
 ];
 
 export const commentCreateValidation = [
-    body('content').isLength({min: 10, max: 255}).isString()
-]
+    body('content').isLength({max: 255}).isString(),
+];
+
+export const replyCreateValidation = [
+    body('content').isLength({max: 255}).isString(),
+    body('replyingTo').isString()
+];
 

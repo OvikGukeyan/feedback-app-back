@@ -4,7 +4,7 @@ import ReplyModel from '../models/Reply.js';
 
 
 
-export const create = async(req, res) => {
+export const create = async (req, res) => {
     try {
         const feedbackId = req.params.feedbackId
         const doc = new CommentModel({
@@ -12,8 +12,28 @@ export const create = async(req, res) => {
             user: req.userId
         });
         const comment = await doc.save();
-        const updatedFeedback = await FeedbackModel.findByIdAndUpdate(feedbackId, { $push: { comments: comment._id } }, { new: true });
-        res.json({updatedFeedback} )
+        const updatedFeedback = await FeedbackModel.findByIdAndUpdate(feedbackId, { $push: { comments: comment._id }, $inc: { commentsCount: 1 } }, { new: true })
+            .populate([{
+                path: 'comments',
+                populate: [{
+                    path: 'replies',
+                    populate: {
+                        path: 'user',
+                        select: '-passwordHash'
+                    }
+                },
+                {
+                    path: 'user',
+                    select: '-passwordHash'
+                }]
+            },
+            {
+                path: 'user',
+                select: '-passwordHash'
+            }
+            ])
+            .exec();
+        res.json({ updatedFeedback })
     } catch (error) {
         console.log(error);
         res.status(500).json({

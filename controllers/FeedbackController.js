@@ -1,4 +1,3 @@
-import { json } from "express";
 import FeedbackModel from "../models/Feedback.js";
 
 export const create = async (req, res) => {
@@ -9,7 +8,6 @@ export const create = async (req, res) => {
             category: req.body.category,
             user: req.userId
         });
-
         const feedback = await doc.save();
         res.json(feedback)
     } catch (error) {
@@ -22,7 +20,10 @@ export const create = async (req, res) => {
 
 export const getAll = async (req, res) => {
     try {
-        const feedbacks = await FeedbackModel.find()
+        const sortBy = req.query.sortBy || 'defaultField';
+        const sortOrder = req.query.sortOrder || 'asc';
+        const feedbacks = await FeedbackModel
+            .find()
             .populate([{
                 path: 'comments',
                 populate: [{
@@ -42,6 +43,7 @@ export const getAll = async (req, res) => {
                 select: '-passwordHash'
             }
             ])
+            .sort({ [sortBy]: sortOrder })
             .exec();
         res.json(feedbacks)
     } catch (error) {
@@ -56,25 +58,25 @@ export const getOne = async (req, res) => {
     try {
         const postId = req.params.id;
         const feedback = await FeedbackModel.findById(postId)
-        .populate([{
-            path: 'comments',
-            populate: [{
-                path: 'replies',
-                populate: {
+            .populate([{
+                path: 'comments',
+                populate: [{
+                    path: 'replies',
+                    populate: {
+                        path: 'user',
+                        select: '-passwordHash'
+                    }
+                },
+                {
                     path: 'user',
                     select: '-passwordHash'
-                }
+                }]
             },
             {
                 path: 'user',
                 select: '-passwordHash'
-            }]
-        },
-        {
-            path: 'user',
-            select: '-passwordHash'
-        }
-        ])
+            }
+            ])
             .exec();
 
         if (!feedback) {
