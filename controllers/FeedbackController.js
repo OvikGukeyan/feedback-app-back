@@ -22,8 +22,15 @@ export const getAll = async (req, res) => {
     try {
         const sortBy = req.query.sortBy || 'defaultField';
         const sortOrder = req.query.sortOrder || 'asc';
+        const filter = {};
+        if(req.query.status) {
+            filter[req.query.category] = req.query.status
+        }
+        
+        console.log(filter)
+
         const feedbacks = await FeedbackModel
-            .find()
+            .find(filter)
             .populate([{
                 path: 'comments',
                 populate: [{
