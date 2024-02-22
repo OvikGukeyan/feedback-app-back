@@ -25,6 +25,7 @@ export const commentCreateValidation = [
 
 export const replyCreateValidation = [
     body('content').isLength({max: 255}).isString(),
-    body('replyingTo').isString()
+    body('replyingTo').isString(),
+    body('feedbackId').isString(),
 ];
 

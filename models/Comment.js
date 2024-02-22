@@ -14,7 +14,10 @@ const CommentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Reply'
     }],
-    
+    feedbackId: {
+        type: String,
+        required: true
+    }
 },
     {
         timestamps: true

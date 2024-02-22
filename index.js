@@ -44,6 +44,8 @@ app.post('/upload', upload.single('image'), async(req, res) => {
 
 app.post('/feedbacks/:feedbackId/comments',checkAuth, commentCreateValidation, handleValidationErrors, CommentController.create);
 app.post('/comments/:commentId/replies',checkAuth, replyCreateValidation, handleValidationErrors, ReplyController.create);
+app.delete('/comments/:commentId', checkAuth, CommentController.remove);
+app.delete('/replies/:replyId', checkAuth, ReplyController.remove);
 
 
 app.get('/feedbacks', FeedbackController.getAll);

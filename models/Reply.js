@@ -13,7 +13,16 @@ const ReplySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    feedbackId: {
+        type: String,
+        required: true
+    },
+    commentId: {
+        type: String,
+        required: true
     }
+
 },
     {
         timestamps: true
