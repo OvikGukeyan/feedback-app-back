@@ -1,4 +1,6 @@
 import FeedbackModel from "../models/Feedback.js";
+import UserModel from '../models/Users.js';
+
 
 export const create = async (req, res) => {
     try {
@@ -23,10 +25,10 @@ export const getAll = async (req, res) => {
         const sortBy = req.query.sortBy || 'defaultField';
         const sortOrder = req.query.sortOrder || 'asc';
         const filter = {};
-        if(req.query.status) {
+        if (req.query.status) {
             filter[req.query.category] = req.query.status
         }
-        
+
         console.log(filter)
 
         const feedbacks = await FeedbackModel
@@ -143,3 +145,25 @@ export const update = async (req, res) => {
     }
 }
 
+export const upvote = async (req, res) => {
+    try {
+        const feedbackId = req.params.feedbackId;
+        const userId = req.userId;
+
+        const userToUpdate = await UserModel.findById(userId);
+
+        if (userToUpdate.upvoted.includes(feedbackId)) {
+            await UserModel.findByIdAndUpdate(userId, { $pull: { upvoted: feedbackId } });
+            await FeedbackModel.findByIdAndUpdate(feedbackId, { $inc: { upvotes: -1 } });
+        }else {
+            await FeedbackModel.findByIdAndUpdate(feedbackId, { $inc: { upvotes: 1 } });
+            await UserModel.findByIdAndUpdate(userId, { $push: { upvoted: feedbackId } });
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Failed to upvote feedback'
+        })
+    }
+}

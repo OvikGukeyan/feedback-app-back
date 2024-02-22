@@ -23,7 +23,11 @@ const UserSchema = new mongoose.Schema(
         avatarUrl: {
             type: String,
             default: "/uploads/default_avatar.png"
-        }
+        },
+        upvoted: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Feedback'
+        }]
     },
     {
         timestamps: true

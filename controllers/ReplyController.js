@@ -36,8 +36,9 @@ export const create = async (req, res) => {
 
 export const remove = async (req, res) => {
     try {
-        const replyId = req.params.commentId;
-        const replyToDelete = await CommentModel.findById(replyId);
+        const replyId = req.params.replyId;
+        const replyToDelete = await ReplyModel.findById(replyId);
+        console.log(replyId)
         if (!replyToDelete) {
             return res.status(500).json({
                 message: 'Reply not found'
