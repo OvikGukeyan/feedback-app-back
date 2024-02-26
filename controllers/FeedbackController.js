@@ -29,7 +29,6 @@ export const getAll = async (req, res) => {
             filter[req.query.category] = req.query.status
         }
 
-        console.log(filter)
 
         const feedbacks = await FeedbackModel
             .find(filter)
@@ -130,7 +129,8 @@ export const update = async (req, res) => {
             title: req.body.title,
             description: req.body.description,
             category: req.body.category,
-            user: req.userId
+            user: req.userId,
+            status: req.body.status
         })
 
         res.json({

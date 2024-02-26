@@ -17,7 +17,7 @@ export const register = async (req, res) => {
             email: req.body.email,
             fullName: req.body.fullName,
             userName: req.body.userName,
-            avatarUrl: req.body.avatarUrl,
+            avatarUrl: req.body.avatarUrl.length > 0 ? req.body.avatarUrl: "/uploads/default_avatar.png",
             passwordHash: hash
         });
 
