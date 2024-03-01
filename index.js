@@ -11,7 +11,8 @@ import { handleValidationErrors, checkAuth } from './utils/index.js';
 
 
 mongoosr
-    .connect('mongodb+srv://admin:cjh0RTbuioCIBQ3f@cluster0.dbo7krm.mongodb.net/feedbackApp?retryWrites=true&w=majority')
+// 'mongodb+srv://admin:cjh0RTbuioCIBQ3f@cluster0.dbo7krm.mongodb.net/feedbackApp?retryWrites=true&w=majority'
+    .connect(process.env.MONGODB_URI)
     .then(() => console.log('DB ok'))
     .catch((err) => console.log('DB error', err))
 
@@ -56,7 +57,7 @@ app.delete('/feedbacks/:id', checkAuth, FeedbackController.remove);
 app.patch('/feedbacks/:id', checkAuth, feedbackCreatekValidation, handleValidationErrors, FeedbackController.update);
 
 
-app.listen(4444, (err) => {
+app.listen(process.env.PORT || 4444, (err) => {
     if (err) {
         return console.log(err)
     }

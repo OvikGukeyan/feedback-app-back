@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start:dev": "nodemon index.js",
-    "vercel-build": "echo hello"
+    "start": "node index.js"
   },
   "author": "Ovik Hukieian",
   "license": "ISC",
