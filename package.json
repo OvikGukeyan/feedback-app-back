@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start:dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "yarn"
   },
   "author": "Ovik Hukieian",
   "license": "ISC",
