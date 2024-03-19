@@ -11,8 +11,10 @@ import { handleValidationErrors, checkAuth } from './utils/index.js';
 
 
 mongoosr
-// 'mongodb+srv://admin:cjh0RTbuioCIBQ3f@cluster0.dbo7krm.mongodb.net/feedbackApp?retryWrites=true&w=majority'
-    .connect(process.env.MONGODB_URI)
+
+    // .connect(process.env.MONGODB_URI)
+
+    .connect('mongodb+srv://admin:cjh0RTbuioCIBQ3f@cluster0.dbo7krm.mongodb.net/feedbackApp?retryWrites=true&w=majority')
     .then(() => console.log('DB ok'))
     .catch((err) => console.log('DB error', err))
 
@@ -48,7 +50,7 @@ app.post('/comments/:commentId/replies', checkAuth, replyCreateValidation, handl
 app.delete('/comments/:commentId', checkAuth, CommentController.remove);
 app.delete('/replies/:replyId', checkAuth, ReplyController.remove);
 
-app.post('/feedbacks/:feedbackId/upvote' , checkAuth, FeedbackController.upvote)
+app.post('/feedbacks/:feedbackId/upvote', checkAuth, FeedbackController.upvote)
 
 app.get('/feedbacks', FeedbackController.getAll);
 app.get('/feedbacks/:id', FeedbackController.getOne);

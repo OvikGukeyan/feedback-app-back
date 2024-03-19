@@ -11,7 +11,7 @@ export const create = async (req, res) => {
             user: req.userId
         });
         const feedback = await doc.save();
-        res.json(feedback)
+        res.status(201).json(feedback)
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -111,7 +111,7 @@ export const remove = async (req, res) => {
                 message: 'Feedback not found'
             })
         }
-        res.json({
+        res.status(204).json({
             success: true
         })
     } catch (error) {
