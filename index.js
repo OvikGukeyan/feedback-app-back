@@ -12,9 +12,9 @@ import { handleValidationErrors, checkAuth } from './utils/index.js';
 
 mongoosr
 
-    // .connect(process.env.MONGODB_URI)
+    .connect(process.env.MONGODB_URI)
 
-    .connect('mongodb+srv://admin:cjh0RTbuioCIBQ3f@cluster0.dbo7krm.mongodb.net/feedbackApp?retryWrites=true&w=majority')
+    // .connect('mongodb+srv://admin:cjh0RTbuioCIBQ3f@cluster0.dbo7krm.mongodb.net/feedbackApp?retryWrites=true&w=majority')
     .then(() => console.log('DB ok'))
     .catch((err) => console.log('DB error', err))
 
